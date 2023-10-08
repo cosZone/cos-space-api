@@ -13,5 +13,16 @@ export class UserService {
     });
   }
 
+  async findOrCreateUser(data: CreateUserDto): Promise<UserModel> {
+    const user = await this.prisma.user.findUnique({
+      where: { clerkUserID: data.clerkUserID },
+    });
+
+    if (user) {
+      return user;
+    }
+
+    return this.createUser(data);
+  }
   // Add other methods as needed (e.g., updateUser, deleteUser, getUsers, etc.)
 }
