@@ -1,11 +1,11 @@
+import { Module } from '@nestjs/common';
 import { PrismaService } from '@/common/services/prisma/prisma.service';
 import { UserService } from './user.service';
-import { Module } from '@nestjs/common';
+import { UserController } from './user.controller';
 
-// 用户模块
 @Module({
   providers: [UserService, PrismaService],
   exports: [UserService],
-  controllers: [],
+  controllers: [UserController],
 })
-export class UsersModule {}
+export class UserModule {}

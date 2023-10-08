@@ -10,12 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Clerk JWT: https://clerk.com/docs/backend-requests/making/jwt-templates#default-claims
 model User {
-  id        Int       @id @default(autoincrement())
-  user_name String    @unique
-  email     String?   @unique
-  posts     Post[]    @relation("UserPosts")
-  Comment   Comment[]
+  id            Int       @id @default(autoincrement())
+  clerkUserID   String    @unique // Clerk User Id 唯一标识 如user_abc123bcde
+  username      String? // 用户自定义昵称 可重复
+  email         String?
+  walletAddress String?
+  avatar        String?
+  createAt      DateTime? // Clerk JWT
+  updateAt      DateTime? // Clerk JWT
+
+  posts    Post[]    @relation("UserPosts")
+  comments Comment[] @relation("UserComments")
 }
 
 enum PostStatus {
@@ -33,12 +40,11 @@ model Post {
   status      PostStatus? @default(DRAFT)
   author      User?       @relation("UserPosts", fields: [authorId], references: [id])
   authorId    Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?   @updatedAt
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-
-  tags    Tag[]
-  Comment Comment[]
+  comments Comment[] @relation("PostComments")
+  tags     Tag[]     @relation("PostTags") // 多对多
 }
 
 model Tag {
@@ -49,34 +55,32 @@ model Tag {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  // 多对多
-  posts Post[]
+  posts Post[] @relation("PostTags") // 多对多
 }
 
 model Category {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String // 分类名称 如笔记
   key         String? // 对应英文短链接描述 如note
   description String? // 分区描述
   coverUrl    String? // 分区封面
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
 }
 
 // 评论 可以回复评论 也可以引用文章句子评论
 model Comment {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   content    String
   quotedText String? // 引用的文章句子
   authorId   Int
-  author     User      @relation(fields: [authorId], references: [id])
   postId     Int
-  post       Post      @relation(fields: [postId], references: [id])
   parentId   Int? // 如果这是一个回复，这里将存储被回复的评论的ID
-  parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  replies    Comment[] @relation("CommentReplies")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  author  User      @relation("UserComments", fields: [authorId], references: [id])
+  post    Post      @relation("PostComments", fields: [postId], references: [id])
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
 }
