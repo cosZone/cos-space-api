@@ -1,12 +1,10 @@
+import { IS_PUBLIC_KEY } from '@/common/decorator';
+import { IAuthUser } from '@/common/interfaces';
+import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-
-import { IS_PUBLIC_KEY } from '@/common/decorator';
-import { IAuthUser } from '@/common/interfaces';
-import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(

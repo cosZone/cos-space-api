@@ -24,5 +24,6 @@ export class CreatePostDto {
 
   @Type(() => Number)
   @IsInt()
+  @IsOptional()
   authorId: number;
 }
