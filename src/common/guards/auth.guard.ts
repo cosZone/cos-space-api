@@ -22,7 +22,6 @@ export class AuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(req);
 
-    Logger.debug('token', token);
     if (!token) {
       throw new UnauthorizedException(['Token expire or not sign in!']);
     }
@@ -30,9 +29,9 @@ export class AuthGuard implements CanActivate {
     let user: IAuthUser;
     try {
       user = await jwt.verify(token, publicKey);
-      Logger.debug('JWT User', user);
       req.user = { ...user };
     } catch (error) {
+      Logger.error(error);
       throw new UnauthorizedException(['Invalid Token']);
     }
 
