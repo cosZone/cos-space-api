@@ -27,3 +27,14 @@ export class CreatePostDto {
   @IsOptional()
   authorId: number;
 }
+
+export class PaginationDto {
+  @IsInt()
+  @IsOptional()
+  page?: number;
+
+  // size
+  @IsInt()
+  @IsOptional()
+  size?: number;
+}

@@ -13,5 +13,8 @@ export class PostService {
     });
   }
 
+  async getAllPosts(): Promise<PostModel[]> {
+    return this.prisma.post.findMany();
+  }
   // Add other methods as needed (e.g., updatePost, deletePost, getPosts, etc.)
 }
