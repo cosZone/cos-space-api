@@ -1,6 +1,6 @@
+import { PostStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, IsString, IsEnum } from 'class-validator';
-import { PostStatus } from './post.entity';
 
 export class CreatePostDto {
   @IsString()

@@ -8,7 +8,7 @@ import { Public } from '@/common/decorator';
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Post('')
+  @Post('add')
   async createPost(@Body() postData: CreatePostDto): Promise<PostModel> {
     return this.postService.createPost(postData);
   }

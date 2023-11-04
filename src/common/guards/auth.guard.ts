@@ -1,4 +1,4 @@
-import { IS_PUBLIC_KEY } from '@/common/decorator';
+import { IS_PUBLIC_KEY, NOT_ONLY_OWNER_KEY } from '@/common/decorator';
 import { IAuthUser } from '@/common/interfaces';
 import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [context.getHandler(), context.getClass()]);
+    const notOnlyOwner = this.reflector.getAllAndOverride<boolean>(NOT_ONLY_OWNER_KEY, [context.getHandler(), context.getClass()]);
 
     // public 接口不需要校验
     if (isPublic) return true;
@@ -30,6 +31,10 @@ export class AuthGuard implements CanActivate {
     try {
       user = await jwt.verify(token, publicKey);
       req.user = { ...user };
+      if (!notOnlyOwner) {
+        const ownerClerkId = this.configService.get<string>('CLERK_OWNER_USER_ID') ?? '';
+        if (ownerClerkId !== user.userId) return false;
+      }
     } catch (error) {
       Logger.error(error);
       throw new UnauthorizedException(['Invalid Token']);

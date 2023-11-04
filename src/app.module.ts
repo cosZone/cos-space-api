@@ -5,13 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './common/configs/config';
 import { HttpExceptionFilter } from './common/filters';
+import { AuthGuard } from './common/guards/auth.guard';
 import { TransformInterceptor } from './common/interceptors';
+import { GalleryModule } from './modules/gallery/gallery.module';
 import { PostModule } from './modules/post/post.module';
 import { UserModule } from './modules/user/user.module';
-import { AuthGuard } from './common/guards/auth.guard';
 
 @Module({
-  imports: [ConfigModule.forRoot({ cache: true, isGlobal: true, load: [config] }), UserModule, PostModule],
+  imports: [ConfigModule.forRoot({ cache: true, isGlobal: true, load: [config] }), UserModule, PostModule, GalleryModule],
   controllers: [AppController],
   providers: [
     { provide: APP_FILTER, useClass: HttpExceptionFilter },

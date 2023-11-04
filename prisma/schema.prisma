@@ -70,17 +70,44 @@ model Category {
 
 // 评论 可以回复评论 也可以引用文章句子评论
 model Comment {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   content    String
   quotedText String? // 引用的文章句子
   authorId   Int
   postId     Int
   parentId   Int? // 如果这是一个回复，这里将存储被回复的评论的ID
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 
   author  User      @relation("UserComments", fields: [authorId], references: [id])
   post    Post      @relation("PostComments", fields: [postId], references: [id])
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies Comment[] @relation("CommentReplies")
+}
+
+enum GalleryType {
+  TAPE
+}
+
+model GalleryItem {
+  id        Int         @id @default(autoincrement())
+  itemType  GalleryType
+  name      String
+  cover     String?
+  images    String[] // 使用 Scalar List 功能 https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-scalar-lists-arrays
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+
+  orgId Int?
+  org   Organization? @relation(fields: [orgId], references: [id])
+}
+
+model Organization {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  description  String?
+  avatar       String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?     @updatedAt
+  galleryItems GalleryItem[]
 }

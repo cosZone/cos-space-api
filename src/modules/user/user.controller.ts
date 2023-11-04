@@ -1,7 +1,6 @@
 import { AuthUser } from '@/common/decorator/auth-user.decorator';
-import { AuthGuard } from '@/common/guards/auth.guard';
 import { IAuthUser } from '@/common/interfaces';
-import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { User as UserModel } from '@prisma/client';
 import { UserService } from './user.service';
 
@@ -9,7 +8,6 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @UseGuards(AuthGuard)
   @Get('info')
   async getUserInfo(@AuthUser() user: IAuthUser): Promise<UserModel> {
     Logger.debug('getUserInfo user', user);

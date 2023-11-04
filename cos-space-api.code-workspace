@@ -5,7 +5,8 @@
     }
   ],
   "settings": {
-    "prettier.configPath": ".prettierrc.js", 
+    "prettier.configPath": ".prettierrc.js",
     "editor.formatOnSave": true,
+    "cSpell.words": ["nestjs"]
   }
 }
