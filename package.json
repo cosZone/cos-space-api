@@ -13,6 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "pm2":"pm2 start ecosystem.config.js",
+    "pm2:restart":"pm2 restart ecosystem.config.js",
     "pm2:stop":"pm2 stop cos-space-api",
     "pm2:log":"pm2 log cos-space-api",
     "db:init": "npx prisma migrate dev --name init",

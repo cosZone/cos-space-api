@@ -1,3 +1,4 @@
+import { NotOnlyOwner } from '@/common/decorator';
 import { AuthUser } from '@/common/decorator/auth-user.decorator';
 import { IAuthUser } from '@/common/interfaces';
 import { Controller, Get, Logger } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
+	@NotOnlyOwner()
   @Get('info')
   async getUserInfo(@AuthUser() user: IAuthUser): Promise<UserModel> {
     Logger.debug('getUserInfo user', user);

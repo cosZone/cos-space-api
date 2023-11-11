@@ -7,7 +7,8 @@ export interface IAuthUser {
   phone?: string;
   createAt: number;
   updateAt: number;
-
+	isOwner?:boolean
+	
   // Clerk default data : https://clerk.com/docs/backend-requests/making/jwt-templates#default-claims
   azp: string;
   exp: number; // 令牌过期的时间，作为 Unix 时间戳。使用令牌生命周期模板设置确定。

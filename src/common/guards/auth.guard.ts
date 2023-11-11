@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -34,7 +35,8 @@ export class AuthGuard implements CanActivate {
       if (!notOnlyOwner) {
         const ownerClerkId = this.configService.get<string>('CLERK_OWNER_USER_ID') ?? '';
         if (ownerClerkId !== user.userId) return false;
-      }
+				else req.user.isOwner = true
+      } 
     } catch (error) {
       Logger.error(error);
       throw new UnauthorizedException(['Invalid Token']);
