@@ -1,6 +1,6 @@
 import { PostStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, IsEnum, ValidateNested } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsEnum, ValidateNested, IsDateString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -26,6 +26,10 @@ export class CreatePostDto {
   @IsInt()
   @IsOptional()
   authorId: number;
+
+  @IsDateString()
+  @IsOptional()
+  createdAt?: string;
 }
 
 export class CreatePostsDto {
