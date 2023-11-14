@@ -13,6 +13,12 @@ export class PostService {
     });
   }
 
+  async createMultiplePosts(postsData: CreatePostDto[]) {
+    return this.prisma.post.createMany({
+      data: postsData,
+    });
+  }
+
   async getAllPosts(): Promise<PostModel[]> {
     return this.prisma.post.findMany();
   }

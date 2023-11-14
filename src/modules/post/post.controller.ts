@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Post as PostModel } from '@prisma/client';
-import { CreatePostDto } from './post.dto';
+import { CreatePostDto, CreatePostsDto } from './post.dto';
 import { PostService } from './post.service';
 import { Public } from '@/common/decorator';
 
@@ -11,6 +11,11 @@ export class PostController {
   @Post('add')
   async createPost(@Body() postData: CreatePostDto): Promise<PostModel> {
     return this.postService.createPost(postData);
+  }
+
+  @Post('add/batch')
+  async createMultiplePosts(@Body() postsData: CreatePostsDto) {
+    return this.postService.createMultiplePosts(postsData.posts);
   }
 
   @Public()
