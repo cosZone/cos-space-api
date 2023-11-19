@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Post as PostModel } from '@prisma/client';
 import { CreatePostDto, CreatePostsDto } from './post.dto';
 import { PostService } from './post.service';
@@ -22,6 +22,12 @@ export class PostController {
   @Get('public/all')
   async getAllPosts(): Promise<PostModel[]> {
     return this.postService.getAllPosts();
+  }
+	
+  @Public()
+  @Get(':id')
+  async getPostById(@Param('id') id: number): Promise<PostModel | null> {
+    return this.postService.getPostById(id);
   }
   // Add other endpoints as needed (e.g., update, delete, get, etc.)
 }

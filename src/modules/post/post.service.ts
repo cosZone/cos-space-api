@@ -22,5 +22,13 @@ export class PostService {
   async getAllPosts(): Promise<PostModel[]> {
     return this.prisma.post.findMany();
   }
+
+  async getPostById(id: number): Promise<PostModel | null> {
+    return this.prisma.post.findUnique({
+      where: {
+        id 
+      },
+    });
+  }
   // Add other methods as needed (e.g., updatePost, deletePost, getPosts, etc.)
 }
